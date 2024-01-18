@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+		  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script type="text/javascript" >// <![CDATA[
+        function loading(){
+            $("#loading").show();
+            $("#content").hide();       
+        }
+// ]]></script>
+	<title>Alexa</title>
+	
+	<style>
+		  .heading { color: #FFFFFF;}
+
+          .page th {
+                    background-color: #add8e6;
+                    color: white;
+          }
+          body {
+                background-image: url('{{ url_for('static', filename='img_4.png')}}') no-repeat;
+                background-color: #cccccc;
+                height: 755px;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+                position: relative;
+          }
+          div#loading {
+                       width: 1700px;
+                       height: 35px;
+                       display: none;
+                       cursor: wait;
+
+          }
+          .center {
+                   display: flex;
+                   justify-content: center;
+                   margin-top: 180px;
+                   color: black;
+                   font-size: 30px;
+                   font-weight: bold;}
+
+          .center1 {
+                    display: flex;
+                    justify-content: center;
+                    margin-top: 10px;
+                    color: black;
+                    font-weight: bold;
+          }
+	</style>
+
+</head>
+ <body style="background-image: url('{{ url_for('static', filename='img_4.png') }}');height:500px;width:1500px;">
+ <div>
+
+	<form method="POST" action="/" enctype="multipart/form-data">
+	 <button type="submit" class="btn btn-primary button_add" style="border: none; display: block; background: none; margin: 150px 0px 0px 605px;">
+		 <img src="{{ url_for('static', filename='alexa.png') }}" >
+    </button>
+   <h1 class="heading center1" style="margin: -20px 0px 0px -5px;color: #69008C;">Tap to Speak</h1>
+   	<h1 class="heading center" style="margin: 20px 0px 0px 0px;"> </h1>
+	<h1 class="heading center"> </h1>
+	</form>
+	<form method="GET" action="/" enctype="multipart/form-data">
+	</form>
+	<br>
+	<div id="loading" ><br>
+		<p style="margin: -600px 20px 20px 670px; color:#69008C; font-size: 24px; font-weight: bold;">Listening...</p></div>
+<br>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+        const button = document.querySelector('.button_add');
+        const loading = document.getElementById('loading');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            loading.style.display = 'block';
+
+            fetch('/process_command', {
+                method: 'POST',
+                body: new FormData(form)
+            })
+            .then(response => response.json())
+            .then(data => {
+                loading.style.display = 'none';
+                // Update the HTML content with the response
+                document.querySelector('.heading.center').textContent = data.response;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                loading.style.display = 'none';
+            });
+        });
+    });
+</script>
+
+
+</body>
+</html>
